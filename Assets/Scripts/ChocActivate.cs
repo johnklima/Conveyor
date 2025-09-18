@@ -2,35 +2,50 @@ using UnityEngine;
 
 public class ChocActivate : MonoBehaviour
 {
-
-    private void OnTriggerEnter(Collider other)
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
-        if (other.tag == "chocolate")
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.tag == "chocolate")
         {
-            Transform choc =other.transform;
+            Transform choc = collision.collider.transform;
 
-            Rigidbody body = choc.GetComponent<Rigidbody>();
+            //check if in hand, do nothing
+            if (choc.GetComponent<MoveChocolate>().inHand)
+                return;
 
-            body.isKinematic = true;
-
+           
             MoveChocolate move = choc.GetComponent<MoveChocolate>();
-            move.speed = 1.5f;
+            Rigidbody body = choc.GetComponent<Rigidbody>();
+            body.isKinematic = true;
+            move.speed = 2f;
+
         }
     }
-    private void OnTriggerExit(Collider other)
+
+    private void OnCollisionExit(Collision collision)
     {
-        if (other.tag == "chocolate")
+        if (collision.collider.tag == "chocolate")
         {
-            Transform choc = other.transform;
+            Transform choc = collision.collider.transform;
+
+            //check if in hand, do nothing
+            if (choc.GetComponent<MoveChocolate>().inHand)
+                return;
 
             Rigidbody body = choc.GetComponent<Rigidbody>();
             body.isKinematic = false;
 
-            MoveChocolate move = choc.GetComponent<MoveChocolate>();
-            move.speed = 0.0f;
-
         }
     }
-
-
 }
